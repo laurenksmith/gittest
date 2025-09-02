@@ -74,7 +74,7 @@ print(id(a))
 
 a = b
 print(a, b)
-"""
+
 
 # 13. Start with this code: python x = 10 y = x
 # 14. Check the id of x and y
@@ -83,7 +83,7 @@ y = x
 
 print('The ID number of x is: ' + str(id(x)), '\nThe ID number of y is: ' + str(id(y)))
 
-"""
+
 15. Explain why the id of x and y are the same
         I believe, linked to the previous question about ID numbers, it is because, although they are 2 different variables
         (x, y), y is now using x's value, which is stored at a specific 'address' in Python's memory, located using it's
