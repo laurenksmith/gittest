@@ -33,16 +33,43 @@ c = "there are numbers here"
 print(a + b + c)
 print(str(a) + str(b) + c)
 """
-# string formatting
+# # string formatting
+#
+# name = "Lassie"
+# years = 7
+# height_cm = 60.2
+#
+# print(f"{name} is {years} years old and {height_cm} cm tall.") # curly braces used to bring in the variables. f shows formatting
+# print(f"{name} is {years + 1} years old and {height_cm} cm tall.")
+#
+# pi = 3.1415926359
+#
+# print(f"Pi to 3 decimal places is {pi:.3f}.") # :.3f tells it to leave it to 3 decimal places. Always inside curly brackets.
+# print(f"Pi to 5 decimal places is {pi:.5f}.")
 
-name = "Lassie"
-years = 7
-height_cm = 60.2
+hi = "Hello World!"
 
-print(f"{name} is {years} years old and {height_cm} cm tall.") # curly braces used to bring in the variables. f shows formatting
-print(f"{name} is {years + 1} years old and {height_cm} cm tall.")
+# print(hi.isalpha())
+# print(hi.isalpha())
+# print(hi.islower())
+# print(hi.isupper())
+# print(hi.endswith("o"))
+# print(hi.startswith("Hel"))
 
-pi = 3.1415926359
+# print(bool("")) # omitted values return false
+# print(bool("a")) # all strings return true
+# print(bool("ZEBRA"))
+# print(bool(False)) # False returns False
+# print(bool(10)) # integers return True
+# print(bool(0)) # omitted value, therefore false
 
-print(f"Pi to 3 decimal places is {pi:.3f}.") # :.3f tells it to leave it to 3 decimal places. Always inside curly brackets.
-print(f"Pi to 5 decimal places is {pi:.5f}.")
+# None
+# None is an object
+
+x = None
+
+print(x == False)
+print(x == True)
+print(x == None)
+print(x is None) # preferred way of checking. More accurately able to identify objects
+print(type(x))
