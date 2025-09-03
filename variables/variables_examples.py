@@ -65,10 +65,10 @@ print(id(a))
 
 
 11. Why does the 'id' of the variable change?
-        When a variable is created, it's value is assigned it's own unique ID number like an 'address', where it is stored in
-        Python's memory. So, a's original value, 5, was created, that value (5) given it's own ID number. Although I have
-        overwritten the value of 'a', it is a different value, therefore it gets it's own ID number as it is stored in a
-        'place' or 'address' in Python's memory.
+        When a variable is created, it's value is assigned its own unique ID number like an 'address', where it is
+        stored in Python's memory. So, a's original value, 5, was created, that value (5) given its own ID number.
+        Although I have overwritten the value of 'a', it is a different value, therefore it gets its own ID number as
+        it is stored in a 'place' or 'address' in Python's memory.
 
 12. Assign one variable to another
 
@@ -99,22 +99,22 @@ print('The ID number of x is: ' + str(id(x)), '\nThe ID number of y is: ' + str(
 
 x = 15
 print('The ID number of x is: ' + str(id(x)), '\nThe ID number of y is: ' + str(id(y)))
-
+"""
 # 17. Ask the user for some input and print the input to the screen
 # 18. Get the user's name and print to the screen
 greeting = input('\n Hello! How are you today? ')
 print('You said:', greeting + '.')
 name = input('\nWhat is your name? ').capitalize()
 # print("Lovely to meet you,", name + '.')
-
+"""
 # 19. Improve previous code to: Get name, age and DOB details from a user and print the details to the screen
 # 20. If time, improve previous code to prompt the user and get the input on the same line
 # 21. If time, improve previous code to print "Hi <name>" on the one line
-
+"""
 print('Lovely to meet you,', name + '.')
 age = int(input('\nMay I ask how old you are? '))
 print(str(age) + '! You do not look a day over 21.')
 dob = input('\nWhat is your date of birth? Please enter this in DD/MM/YYYY format. ')
 print('You have said your birthdate is: ', dob + '.')
-"""
+
 
