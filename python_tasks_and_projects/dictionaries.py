@@ -15,13 +15,13 @@ student_1 = {
     "name": "susan",
     "stream": "tech",
     "completed_lessons": 4,
-    "completed_lesson_names": ["variables", "data_types", "set up"]
+    "completed_lesson_names": ["variables", "data_types", "set up", "collections"]
 }
 
 """
 Explain how a dictionary saves/structures data? Example, what does each value need to be accompanied/associated with?
     In dictionaries in Python, data is stored/saved in pairs. So, each value needs to be accompanied by a label,
-    called a key. This key is used to call the value, so that Python knows where to find it.
+    called a key. This key is used to call the value, so that Python knows where to find it. These are called key value pairs.
 """
 
 # Print the dictionary to the screen
@@ -53,3 +53,8 @@ print(student_1)
 
 # Use the keys() method on your dictionary to list all the keys
 print(student_1.keys())
+
+# how to change item in a list inside a dictionary
+
+student_1["completed_lesson_names"].remove("collections")
+print(student_1["completed_lesson_names"])

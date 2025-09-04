@@ -50,13 +50,8 @@ print(f"OMG {name_str}, you are {age_int} years old so you were born in {birth_y
 """
 Third Part
 calculate and print out the total number of hours this person has lived
-If time
-figure out a way to account for if the persons birthday has already happened this year or not
-go look into the library 'time' to be more accurate with the hours lived
-show in your script that you have evaluated the methods of calculating the hours lived to see which is more accurate
 """
-
-hours = age_int * 8760
+hours = age_int * 8760 # this method and the method below give the same answer.
 
 print(f" You have been alive for about {hours} hours.")
 
@@ -64,7 +59,20 @@ age = timedelta(days=365*age_int)
 number_of_hours = age.total_seconds() / 3600
 
 print(f" You have been alive for about {number_of_hours} hours.")
+"""
+If time
+figure out a way to account for if the persons birthday has already happened this year or not
+go look into the library 'time' to be more accurate with the hours lived
+show in your script that you have evaluated the methods of calculating the hours lived to see which is more accurate
+"""
 
-date = datetime.now()
+birthday_string = (input('\n Has your birthday already been (2025)? Y/N: '))
+
+if birthday_string.upper == 'N':
+    actual_age = age_int + 1
+else:
+    actual_age = age_int
+
+hours = actual_age
 
 

@@ -99,7 +99,10 @@ print("I lied. You can take one more item.")
 essential_item4 = input("What is one more essential item you would take? ")
 # try to add the 4th item to the tuple
 # if you can't add the 4th item, work out how to save the 4th item to the tuple
-additional_tuple = (essential_item4,)
-final_essentials_tuple = (essentials_tuple + additional_tuple)
+# additional_tuple = (essential_item4,)
+# final_essentials_tuple = (essentials_tuple + additional_tuple)
+# Discovered a quicker way to achieve the above
+# print("Here are your items as a tuple (with the 4th item added):", final_essentials_tuple)
 
+final_essentials_tuple = (essential_item1, essential_item2,essential_item3, essential_item4)
 print("Here are your items as a tuple (with the 4th item added):", final_essentials_tuple)
