@@ -17,4 +17,4 @@ def addition(int1=1, int2=2): # use =1 (as an example) as a default value, so th
 print(addition())
 
 
-# Library Modules and Packagaes
+# Library Modules and Packages

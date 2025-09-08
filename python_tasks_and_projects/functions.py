@@ -1,4 +1,5 @@
 import math
+import unittest
 
 print("\nQ1a\n")
 
@@ -7,16 +8,16 @@ print("\nQ1a\n")
 # hint: range(1, n) returns a collection of the numbers from 1 to n-1
 
 
-# A1a:
-def number_of_divisors(num):
-    divisors = []
-    for i in range(1, num +1):
-        if num % i == 0:
-            divisors.append(i)
-    return divisors
-
-
-print(number_of_divisors(36))
+# # A1a:
+# def number_of_divisors(num):
+#     divisors = []
+#     for i in range(1, num +1):
+#         if num % i == 0:
+#             divisors.append(i)
+#     return divisors
+#
+#
+# print(number_of_divisors(36))
 
 
 print("\nQ1b\n")
@@ -127,3 +128,7 @@ print("\nQ3b\n")
 
 
 # -------------------------------------------------------------------------------------- #
+
+
+# unittesting
+
