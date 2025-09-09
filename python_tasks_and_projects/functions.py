@@ -1,7 +1,7 @@
 import math
 import unittest
 
-print("\nQ1a\n")
+# print("\nQ1a\n")
 
 # Q1a: Write a function which takes in an integer as an argument and returns the divisors of that number as a list
 # e.g. f(12) = [1, 2, 3, 4, 6, 12]
@@ -20,7 +20,7 @@ print("\nQ1a\n")
 # print(number_of_divisors(36))
 
 
-print("\nQ1b\n")
+# print("\nQ1b\n")
 # Q1b: Write a function which takes in two integers as arguments and returns true if one of the numbers
 # is a factor of the other, false otherwise
 # (bonus points if you call your previous function within this function)
@@ -35,16 +35,16 @@ print("\nQ1b\n")
 # I know there is a way to check for 2 different 'elements' and then return True or False (learnt yesterday)
 
 
-print(42 % 7 == 0 or 7 % 42 == 0)
+# print(42 % 7 == 0 or 7 % 42 == 0)
 
 
 # -------------------------------------------------------------------------------------- #
 
-print("\nQ2a\n")
-# Q2a: write a function which takes a letter (as a string) as an input and outputs it's position in the alphabet
-
-alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-             "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
+# print("\nQ2a\n")
+# # Q2a: write a function which takes a letter (as a string) as an input and outputs it's position in the alphabet
+#
+# alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+#              "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
 
 # choose_a_letter = input("Pick any letter from the alphabet: ")
 # choose_a_letter = choose_a_letter.lower()
@@ -54,7 +54,7 @@ alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
 # print(f"Your chosen letter, '{choose_a_letter}' is in position {position_in_alphabet} in the alphabet.")
 
 # A2a:
-print("\nQ2b\n")
+# print("\nQ2b\n")
 # Q2b: create a function which takes a persons name as an input string and returns an
 # ID number consisting of the positions of each letter in the name
 # e.g. f("bob") = "1141" as "b" is in position 1 and "o" is in position 14
@@ -70,8 +70,7 @@ print("\nQ2b\n")
 
 
 # A2b:
-print("\nQ2c\n")
-# Q2c: Create a function which turns this ID into a password. The function should subtract
+# # Q2c: Create a function which turns this ID into a password. The function should subtract
 # the sum of the numbers in the id that was generated from the whole number of the id.
 # e.g. f("bob") -> 1134 (because bob's id was 1141 and 1+1+4+1 = 7 so 1141 - 7 = 1134)
 
@@ -92,35 +91,36 @@ print("\nQ2c\n")
 
 # -------------------------------------------------------------------------------------- #
 
-print("\nQ3a\n")
+# print("\nQ3a\n")
 # Q3a: Write a function which takes an integer as an input, and returns true if the number is prime, false otherwise.
 
 # A3a:
 
 
-def prime_number(n):
+def prime_number(n: int) -> bool:
 
     if n <= 1:
         return False
 
-    for i in range(2, int(math.sqrt(n))):
+    for i in range(2, int(math.sqrt(n)) +1):
         if n % i == 0:
             return False
     return True
 
 
-while True:
-    try:
-        user_number = int(input("Choose an integer: "))
-        break
-    except ValueError:
-        print("Oops! Please only enter integers (numbers/digits).")
+if __name__ == "__main__":
+    while True:
+        try:
+            user_number = int(input("Choose an integer: "))
+            break
+        except ValueError:
+            print("Oops! Please only enter integers (numbers/digits).")
 
-result = prime_number(user_number)
-print(f"Is {user_number} prime? {result}")
+    result = prime_number(user_number)
+    print(f"Is {user_number} prime? {result}")
 
 
-print("\nQ3b\n")
+# print("\nQ3b\n")
 # Q3b: Now add some functionality to the function which does not error if the user inputs something other than a digit
 
 # A3b:

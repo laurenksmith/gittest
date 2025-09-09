@@ -1,30 +1,10 @@
-import math
 import unittest
 from unittest.mock import patch
-
-def prime_number(n):
-
-    if n <= 1:
-        return False
-
-    for i in range(2, int(math.sqrt(n))):
-        if n % i == 0:
-            return False
-    return True
+from functions import prime_number
 
 
-while True:
-    try:
-        user_number = int(input("Choose an integer: "))
-        break
-    except ValueError:
-        print("Oops! Please only enter integers (numbers/digits).")
-
-result = prime_number(user_number)
-print(f"Is {user_number} prime? {result}")
-
-# unittesting
-# Best practice is normally to have a separate unittesting file.
+# unittest
+# Best practice is normally to have a separate unittest file.
 # Used to test edge cases, error handling, input and output.
 # Used to test smallest parts of software - eg separate scripts.
 # Best practice to test a few of each: in other words, for error handling, try 3 different inputs that should return an error message to see
@@ -41,9 +21,9 @@ class TestPrimeNumber(unittest.TestCase):  # TestCase is a set of conditions use
         self.assertTrue(prime_number(5))
 
     def test_small_not_prime(self):
-        self.assertTrue(prime_number(4))
-        self.assertTrue(prime_number(6))
-        self.assertTrue(prime_number(8))
+        self.assertFalse(prime_number(4))
+        self.assertFalse(prime_number(6))
+        self.assertFalse(prime_number(8))
 
     def test_large_prime(self):
         self.assertTrue(prime_number(10007))
@@ -51,9 +31,9 @@ class TestPrimeNumber(unittest.TestCase):  # TestCase is a set of conditions use
         self.assertTrue(prime_number(99991))
 
     def test_large_not_prime(self):
-        self.assertTrue(prime_number(10000))
-        self.assertTrue(prime_number(55222))
-        self.assertTrue(prime_number(99999))
+        self.assertFalse(prime_number(10000))
+        self.assertFalse(prime_number(55222))
+        self.assertFalse(prime_number(99999))
 
 
 # Edge testing = test the objects on the edge of your given parameters.
@@ -64,3 +44,7 @@ class TestPrimeNumber(unittest.TestCase):  # TestCase is a set of conditions use
 
 # Error handling = test to see if the error message appears when the user types anything other than an integer
 #     def test_error_handling(self):
+
+
+if __name__ == "__main__":
+    unittest.main()
