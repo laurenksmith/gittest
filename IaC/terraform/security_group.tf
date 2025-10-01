@@ -1,4 +1,4 @@
-# Using Terraform and Terraform official documentation:
+
 
 # Modify the EC2 instance created in main.tf:
 # Attach the key to be used with EC2 instance
