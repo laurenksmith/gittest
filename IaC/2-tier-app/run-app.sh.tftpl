@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Tested on: AWS, Ubuntu 22.04 LTS
+# Works on: New VM and created from image
+# Tested by:  Lauren Copas 
+# Date Tested on: 23/09/2025
+
+# Use the CURRENT folder (User Data runs as root; working dir is "/")
+WORKDIR="$(pwd)"
+echo "Working directory is: $WORKDIR"
+echo
+
+# cd into app folder
+echo Moving into app directory...
+cd "$WORKDIR/tech-511-lauren-first-app/app"
+echo Done!
+echo
+
+# Connect database to app - this will hopefully automatically add the DB's private IP address
+echo Connecting to the database...
+set -e
+export DB_HOST="mongodb://${db_ip}:27017/posts"
+echo "DB_HOST=$${DB_HOST}" >> /etc/environment 
+echo Done!
+echo
+
+# run app in the background with pm2
+echo Starting up the app...
+pm2 start app.js --name app --update-env
+echo Done!
+echo
