@@ -14,15 +14,6 @@ data "aws_vpc" "default" {
   default = true
 }
 
-terraform {
-  required_providers {
-    http = {
-      source  = "hashicorp/http"
-      version = "~> 3.4"
-    }
-  }
-}
-
 # Fetch your public IP as plain text
 data "http" "myip" {
   url = "https://api.ipify.org?format=text"
