@@ -1,0 +1,95 @@
+# starts with --- (three hyphens)
+# yml very sensitive to indentation - be careful and double check
+---
+
+# name the play
+- name: install app dependencies and run app
+  hosts: web
+  gather_facts: true
+  become: true
+
+  vars:
+    db_host: "mongodb://172.31.33.111/posts"
+
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: install nginx
+      ansible.builtin.apt: pkg=nginx state=present
+
+    - name: Download NodeSource setup script (Node.js 20.x)
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_20.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Clone the Sparta repo
+      ansible.builtin.git:
+        repo: https://github.com/laurenksmith/tech-511-lauren-first-app.git
+        dest: ~/tech-511-lauren-first-app
+        version: main
+      become: false
+
+    - name: Clean install deps (runs postinstall seeds)
+      ansible.builtin.command: npm ci
+      args:
+        chdir: ~/tech-511-lauren-first-app/app
+      environment:
+        DB_HOST: "mongodb://172.31.33.111/posts"
+      become: false
+
+    - name: Install PM2 globally
+      ansible.builtin.npm:
+        name: pm2
+        global: true
+
+    - name: Stop app if running (ignore if not running)
+      ansible.builtin.shell: pm2 stop app || true
+      become: false
+
+    - name: Start (or restart) app with PM2 and pass DB_HOST
+      ansible.builtin.shell: |
+        pm2 describe app >/dev/null 2>&1 \
+          && pm2 restart app --update-env \
+          || pm2 start app.js --name app --update-env
+      args:
+        chdir: ~/tech-511-lauren-first-app/app
+      environment:
+        DB_HOST: "mongodb://172.31.33.111/posts"
+      become: false
+
+    - name: Save PM2 process list
+      ansible.builtin.shell: pm2 save
+      become: false
+
+    # --- Nginx reverse proxy ---
+    - name: Backup default Nginx site
+      ansible.builtin.copy:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-available/default.bak
+        remote_src: true
+        mode: '0644'
+
+    - name: Point Nginx default site at Node app on :3000
+      ansible.builtin.lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*try_files\s+\$uri\s+\$uri/\s+=404;'
+        line: '        proxy_pass http://localhost:3000;'
+        backup: true
+
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

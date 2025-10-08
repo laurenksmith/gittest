@@ -1,0 +1,29 @@
+# starts with --- (three hyphens)
+# yml very sensitive to indentation - be careful and double check
+---
+
+# name the play
+- name: install nginx
+  # where we want to install or run this play
+  hosts: web
+
+  # do we want comprehensive facts from the host?
+  gather_facts: true
+
+  # do we want/need admin access here (sudo)?
+  become: true
+
+  # instructions/actions known as tasks put here. Playbook consists of plays. Inside of each play, can have multiple tasks.
+  tasks:
+  - name: update apt cache
+    ansible.builtin.apt:
+      update_cache: yes
+  
+  - name: upgrade all packages
+    ansible.builtin.apt:
+      upgrade: dist # dist stands for distributions
+
+  - name: install nginx
+    ansible.builtin.apt:
+      pkg=nginx state=present # state=present means Ansible will make sure the package is present by the time this task finishes
+      

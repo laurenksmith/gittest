@@ -1,0 +1,166 @@
+# prov-app-all.yml
+---
+
+# PLAY 1: DB
+- name: install db dependencies and run db
+  hosts: db
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: install gnupg and curl
+      ansible.builtin.apt:
+        name:
+          - gnupg
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: download MongoDB 7.0
+      ansible.builtin.get_url:
+        url: https://www.mongodb.org/static/pgp/server-7.0.asc
+        dest: /tmp/mongodb-server-7.0.asc
+        mode: '0644'
+
+    - name: install key into keyring
+      ansible.builtin.command: >
+        gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg /tmp/mongodb-server-7.0.asc
+      args:
+        creates: /usr/share/keyrings/mongodb-server-7.0.gpg
+
+    - name: add MongoDB 7.0 apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse"
+        filename: "mongodb-org-7.0"
+        state: present
+        update_cache: yes
+
+    - name: install MongoDB 7.0
+      ansible.builtin.apt:
+        name:
+          - mongodb-org
+          - mongodb-mongosh
+        state: present
+        update_cache: yes
+
+    - name: set bindIp to 0.0.0.0 in mongod.conf
+      ansible.builtin.lineinfile:
+        path: /etc/mongod.conf
+        regexp: '^\s*bindIp\s*:\s*.*'
+        line: '  bindIp: 0.0.0.0'
+        backup: true
+
+    - name: restart and enable mongod
+      ansible.builtin.service:
+        name: mongod
+        state: restarted
+        enabled: true
+
+# PLAY 2: APP 
+- name: install app dependencies and run app
+  hosts: web
+  gather_facts: true
+  become: true
+
+  vars:
+    db_host: "mongodb://{{ hostvars[groups['db'][0]].ansible_host | default(groups['db'][0]) }}/posts"
+
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: install nginx
+      ansible.builtin.apt: pkg=nginx state=present
+
+    - name: Download NodeSource setup script (Node.js 20.x)
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_20.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Run NodeSource setup script (adds repo + key)
+      ansible.builtin.command: bash /tmp/nodesource_setup.sh
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Clone the Sparta repo
+      ansible.builtin.git:
+        repo: https://github.com/laurenksmith/tech-511-lauren-first-app.git
+        dest: ~/tech-511-lauren-first-app
+        version: main
+      become: false
+
+    - name: Clean install deps (runs postinstall seeds)
+      ansible.builtin.command: npm ci
+      args:
+        chdir: ~/tech-511-lauren-first-app/app
+      environment:
+        DB_HOST: "{{ db_host }}"
+      become: false
+
+    - name: Install PM2 globally
+      ansible.builtin.npm:
+        name: pm2
+        global: true
+
+    - name: Stop app if running (ignore if not running)
+      ansible.builtin.shell: pm2 stop app || true
+      become: false
+
+    - name: Start (or restart) app with PM2 and pass DB_HOST
+      ansible.builtin.shell: |
+        pm2 describe app >/dev/null 2>&1 \
+          && pm2 restart app --update-env \
+          || pm2 start app.js --name app --update-env
+      args:
+        chdir: ~/tech-511-lauren-first-app/app
+      environment:
+        DB_HOST: "{{ db_host }}"
+      become: false
+
+    - name: Save PM2 process list
+      ansible.builtin.shell: pm2 save
+      become: false
+
+    # --- Nginx reverse proxy ---
+    - name: Backup default Nginx site
+      ansible.builtin.copy:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-available/default.bak
+        remote_src: true
+        mode: '0644'
+
+    - name: Point Nginx default site at Node app on :3000
+      ansible.builtin.lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*try_files\s+\$uri\s+\$uri/\s+=404;'
+        line: '        proxy_pass http://localhost:3000;'
+        backup: true
+
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
+

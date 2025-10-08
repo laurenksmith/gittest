@@ -74,10 +74,13 @@ resource "aws_security_group" "app_deploy_tf_sg" {
   description = var.sg_description_app
   vpc_id      = aws_vpc.my_own_vpc.id
 
-  tags = { Name = var.tag_name_app }
+  tags = { 
+    Name = var.tag_name_app 
+    }
 }
 
-# Ingress rules
+  # Ingress rules
+    # Allow port 22
 resource "aws_vpc_security_group_ingress_rule" "app_allow_port22" {
   security_group_id = aws_security_group.app_deploy_tf_sg.id
   cidr_ipv4         = "45.146.10.181/32"
@@ -86,6 +89,7 @@ resource "aws_vpc_security_group_ingress_rule" "app_allow_port22" {
   to_port           = 22
 }
 
+    # Allow port 3000
 resource "aws_vpc_security_group_ingress_rule" "app_allow_port3000" {
   security_group_id = aws_security_group.app_deploy_tf_sg.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -94,6 +98,7 @@ resource "aws_vpc_security_group_ingress_rule" "app_allow_port3000" {
   to_port           = 3000
 }
 
+    # Allow port 80
 resource "aws_vpc_security_group_ingress_rule" "app_allow_port80" {
   security_group_id = aws_security_group.app_deploy_tf_sg.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -102,7 +107,8 @@ resource "aws_vpc_security_group_ingress_rule" "app_allow_port80" {
   to_port           = 80
 }
 
-# Egress rule
+  # Egress rules
+    # Allow all traffic
 resource "aws_vpc_security_group_egress_rule" "app_allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.app_deploy_tf_sg.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -122,5 +128,7 @@ resource "aws_instance" "app_deploy_instance" {
     db_ip = aws_instance.db_deploy_instance.private_ip
   })
 
-  tags = { Name = var.Name_app }
+  tags = { 
+    Name = var.Name_app 
+    }
 }

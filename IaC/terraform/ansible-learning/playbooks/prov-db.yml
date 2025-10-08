@@ -1,0 +1,63 @@
+---
+
+- name: install db dependencies and run db
+  hosts: db
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: install gnupg and curl
+      ansible.builtin.apt:
+        name:
+          - gnupg
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: download MongoDB 7.0
+      ansible.builtin.get_url:
+        url: https://www.mongodb.org/static/pgp/server-7.0.asc
+        dest: /tmp/mongodb-server-7.0.asc
+        mode: '0644'
+
+    - name: install key into keyring
+      ansible.builtin.command: >
+        gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg /tmp/mongodb-server-7.0.asc
+      args:
+        creates: /usr/share/keyrings/mongodb-server-7.0.gpg
+
+    - name: add MongoDB 7.0 apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse"
+        filename: "mongodb-org-7.0"
+        state: present
+        update_cache: yes
+
+    - name: install MongoDB 7.0
+      ansible.builtin.apt:
+        name:
+          - mongodb-org
+          - mongodb-mongosh
+        state: present
+        update_cache: yes
+
+    - name: set bindIp to 0.0.0.0 in mongod.conf
+      ansible.builtin.lineinfile:
+        path: /etc/mongod.conf
+        regexp: '^\s*bindIp\s*:\s*.*'
+        line: '  bindIp: 0.0.0.0'
+        backup: true
+
+    - name: restart and enable mongod
+      ansible.builtin.service:
+        name: mongod
+        state: restarted
+        enabled: true

@@ -1,0 +1,57 @@
+# starts with --- (three hyphens)
+# yml very sensitive to indentation - be careful and double check
+---
+
+# name the play
+- name: install app dependencies and run app
+  # where we want to install or run this play
+  hosts: web
+
+  # do we want comprehensive facts from the host?
+  gather_facts: true
+
+  # do we want/need admin access here (sudo)?
+  become: true
+
+  # instructions/actions known as tasks put here. Playbook consists of plays. Inside of each play, can have multiple tasks.
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist  # dist stands for distributions
+
+    - name: install nginx
+      ansible.builtin.apt: pkg=nginx state=present
+
+    - name: Download NodeSource setup script (Node.js 20.x)
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_20.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Clone the Sparta repo
+      ansible.builtin.git:
+        repo: https://github.com/laurenksmith/tech-511-lauren-first-app.git
+        dest: ~/tech-511-lauren-first-app
+        version: main
+      become: false
+      
+    - name: Navigate to App folder and install Node.js dependencies
+      ansible.builtin.npm:
+        path: ~/tech-511-lauren-first-app/app
+      become: false
+
+    - name: Start Node app using npm start
+      ansible.builtin.shell: npm start
+      args:
+        chdir: ~/tech-511-lauren-first-app/app
+      become: false

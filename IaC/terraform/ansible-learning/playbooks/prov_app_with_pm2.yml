@@ -1,0 +1,153 @@
+# starts with --- (three hyphens)
+# yml very sensitive to indentation - be careful and double check
+---
+
+# name the play
+- name: install app dependencies and run app
+  # where we want to install or run this play
+  hosts: web
+
+  # do we want comprehensive facts from the host?
+  gather_facts: true
+
+  # do we want/need admin access here (sudo)?
+  become: true
+
+  # This tells the controller where to put and find the repo.
+  vars:
+    workdir: "/home/ubuntu"
+    repo_dir: "{{ workdir }}/tech-511-lauren-first-app"
+    app_path: "{{ repo_dir }}/app"
+    db_host: "mongodb://172.31.33.111/posts"   # my db VM's private ip address
+
+  # instructions/actions known as tasks put here. Playbook consists of plays. Inside of each play, can have multiple tasks.
+  tasks:
+    - name: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist  # dist stands for distributions
+
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present  # ensure package is present
+
+    - name: install curl
+      ansible.builtin.apt:
+        name: curl
+        state: present
+        update_cache: yes
+
+    - name: Download NodeSource setup script (Node.js 20.x)
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_20.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Run NodeSource setup script (adds repo + key)
+      ansible.builtin.command: bash /tmp/nodesource_setup.sh
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Ensure git is installed
+      ansible.builtin.apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    # Make sure the parent exists and belongs to ubuntu
+    - name: Ensure workdir exists and is ubuntu-owned
+      ansible.builtin.file:
+        path: "{{ workdir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+      become: true
+
+    # Fresh clone as ubuntu so files are writable by the app user
+    - name: Clone repo fresh as ubuntu
+      ansible.builtin.git:
+        repo: "https://github.com/laurenksmith/tech-511-lauren-first-app.git"
+        dest: "{{ repo_dir }}"
+        version: "main"
+        update: yes
+      become: false
+
+    - name: List files in app folder (example)
+      ansible.builtin.command: ls -la
+      args:
+        chdir: "{{ app_path }}"
+
+    # --- go into app dir and install dependencies (run as ubuntu, not root) ---
+    - name: Install app dependencies (npm install)
+      ansible.builtin.command: npm install
+      args:
+        chdir: "{{ app_path }}"
+        creates: "{{ app_path }}/node_modules"
+      become: false
+
+    # --- install pm2 globally (needs sudo) ---
+    - name: Install PM2 globally
+      ansible.builtin.command: npm install -g pm2
+      args:
+        creates: /usr/bin/pm2
+
+    # --- stop app if running (don't fail if not running) ---
+    - name: Stop app if running (pm2)
+      ansible.builtin.command: pm2 stop app
+      register: pm2_stop
+      failed_when: false
+      changed_when: "'stopped' in pm2_stop.stdout or 'Stopping' in pm2_stop.stdout"
+      become: false
+
+    # --- start app with environment (DB_HOST) ---
+    - name: Start app with PM2 and update env
+      ansible.builtin.command: pm2 start app.js --name app --update-env
+      args:
+        chdir: "{{ app_path }}"
+      environment:
+        DB_HOST: "{{ db_host }}"
+      become: false
+
+    # (optional but handy) save PM2 process list so it survives reboot via pm2 resurrect
+    - name: Save PM2 process list
+      ansible.builtin.command: pm2 save
+      become: false
+
+    # ================== NGINX REVERSE PROXY (optional but recommended) ==================
+    # Back up default site file (mirrors your cp command)
+    - name: Backup default Nginx site
+      ansible.builtin.copy:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-available/default.bak
+        remote_src: true
+        mode: '0644'
+
+    # Replace the try_files line inside the location / block with proxy_pass
+    # This keeps indentation and is idempotent (much safer than sed).
+    - name: Point Nginx default site at Node app on :3000
+      ansible.builtin.lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*try_files\s+\$uri\s+\$uri/\s+=404;'
+        line: '        proxy_pass http://localhost:3000;'
+        backup: true
+
+    # Restart Nginx to apply the change
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
