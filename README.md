@@ -1,234 +1,130 @@
 # Sparta Projects
 
-A collection of my learning from the **Sparta Global Academy** — culminating in my role as a **Level 2 Support Engineer**.
-This repo gathers hands-on exercises, mini-projects, and full pipelines across:
+[![Python](https://img.shields.io/badge/Python-learning-3776AB)](python/)
+[![Cloud (AWS)](https://img.shields.io/badge/Cloud-AWS-232F3E)](Cloud/)
+[![IaC](https://img.shields.io/badge/IaC-Terraform%20%2B%20Ansible-5C4EE5)](IaC/)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-Jenkins-D24939)](CICD/)
 
-* **Python** (scripts, small apps, testing, packaging)
-* **Linux & Bash** (CLI, file ops, SSH, process mgmt)
-* **Cloud (AWS)** (EC2, networking/VPC, AMIs, security groups)
-* **Infrastructure as Code (Terraform)** (modular VPC, EC2, userdata)
-* **Configuration Management (Ansible)** (controller + app/db nodes, idempotent playbooks)
-* **CI/CD (Jenkins)** (three-job pipeline: test → merge → deploy)
+A curated collection of my learning from the **Sparta Global Academy** — culminating in my role as a **Level 2 Support Engineer**.  
+It covers **Python fundamentals**, **AWS/cloud**, **Infrastructure as Code** (Terraform + Ansible), and a **Jenkins-driven CI/CD pipeline**.
 
-> My focus: reliable, supportable systems with clear runbooks, troubleshooting notes, and an “ops-first” mindset.
-
----
-
-## Table of Contents
-
-- [Sparta Projects](#sparta-projects)
-  - [Table of Contents](#table-of-contents)
-  - [Repo Structure](#repo-structure)
-  - [Highlights by Area](#highlights-by-area)
-    - [Python](#python)
-    - [Linux \& Bash](#linux--bash)
-    - [Cloud (AWS)](#cloud-aws)
-    - [Terraform](#terraform)
-    - [Ansible](#ansible)
-    - [CI/CD with Jenkins](#cicd-with-jenkins)
-  - [End-to-End Pipeline (Two-Tier App)](#end-to-end-pipeline-two-tier-app)
-  - [How to Use This Repo](#how-to-use-this-repo)
-  - [Evidence \& Screens](#evidence--screens)
-  - [Troubleshooting \& KEDB](#troubleshooting--kedb)
-  - [Roadmap / Next Steps](#roadmap--next-steps)
-  - [About Me](#about-me)
-    - [Quick Links (replace with actual paths/URLs)](#quick-links-replace-with-actual-pathsurls)
-
----
+> Focus: reliable, supportable systems with clear docs, playbooks, and reproducible pipelines.
 
 ## Repo Structure
 
-```
-Sparta-Projects/
-├─ python/                  # Scripts, small apps, unit tests
-│  ├─ README.md
-│  └─ ...
-├─ linux-bash/              # CLI, file ops, SSH, process mgmt
-│  ├─ README.md
-│  └─ ...
-├─ cloud-aws/               # EC2, AMIs, SGs, networking fundamentals
-│  ├─ README.md
-│  └─ ...
-├─ terraform/               # IaC: VPC, subnets, EC2, userdata
-│  ├─ modules/
-│  ├─ envs/
-│  ├─ README.md
-│  └─ ...
-├─ ansible/                 # Controller + app-node + db-node
-│  ├─ controller/
-│  ├─ app-node/
-│  ├─ db-node/
-│  ├─ playbooks/
-│  ├─ inventory/
-│  ├─ README.md
-│  └─ ...
-├─ cicd-jenkins/            # 3-job pipeline: test → merge → deploy
-│  ├─ job1-ci-test/
-│  ├─ job2-merge/
-│  ├─ job3-cd-deploy/
-│  ├─ README.md
-│  └─ ...
-├─ diagrams/                # Mermaid/Canva diagrams for pipelines & VPCs
-├─ kedb-runbooks/           # Known Error DB + runbooks & SOPs
-└─ README.md                # ← you are here
-```
+spartaprojects/
+├─ python/                     # Scripts, exercises, OOP, small tasks
+├─ Cloud/                      # AWS: VPCs, networks, S3, monitoring, autoscaling
+├─ IaC/                        # Terraform + Ansible examples, two-tier app infra/config
+├─ CICD/                       # Jenkins notes, first-time setup, pipeline diagram
+└─ README.md                   # ← you are here
 
----
+
+## Top 5 entry points
+
+- **Two-Tier App (Terraform)** →   [README.md](IaC/2-tier-app/README.md)
+- **Ansible Playbooks (app + db)** → [Playbooks](IaC/terraform/ansible-learning/playbooks/)  
+- **Jenkins: how our pipeline works** → [`CICD/jenkins-first-time.md`](CICD/jenkins-first-time.md)  
+- **AWS VPCs (networking notes)** → [`Cloud/Securing the Database/aws-vpcs/README.md`](Cloud/Securing%20the%20Database/aws-vpcs/README.md)  
+- **Python tasks & mini-projects** → [`python/`](python/)
+
 
 ## Highlights by Area
 
 ### Python
-
-* Small utilities and learning exercises (functions, OOP, files, CLI tools).
-* **Testing** with `unittest`/`pytest`, basic mocking, and CI integration.
-* Packaging basics and virtual environments for reproducible runs.
-
-**Start here:** `python/README.md`
-**Try:** `python/<project>/` and run instructions inside each subfolder.
-
----
-
-### Linux & Bash
-
-* Everyday ops: navigation, permissions, `mv/cp/grep/sed/awk`, service mgmt.
-* SSH workflows with keys; SCP/rsync for deployments.
-* Useful snippets you actually run in support scenarios.
-
-**Start here:** `linux-bash/README.md`
-
----
+Foundations through to small projects: modules, OOP, unit tests, JSON/YAML translations.
+- Folder: [`python/`](python/)
+- Examples:
+  - Code-along snippets → [`python/codealong/`](python/codealong/)
+  - OOP tasks → [`python/oop/`](python/oop/) and [`python/my_own_oop/`](python/my_own_oop/)
+  - Collections/control-flow tasks → [`python/python_tasks_and_projects/`](python/python_tasks_and_projects/)
+  - JSON↔YAML converter → [`python/translation/json2yaml.py`](python/translation/json2yaml.py) with sample [`original.json`](python/translation/original.json) and [`translation.yaml`](python/translation/translation.yaml)
+  - Variables mini-guide → [`python/variables/README.md`](python/variables/README.md)
 
 ### Cloud (AWS)
+EC2, networking/VPCs, S3 basics, monitoring/alerts, autoscaling patterns.
+- Folder: [`Cloud/`](Cloud/)
+- Deep links:
+  - VPCs (networking primer) → [`Cloud/Securing the Database/aws-vpcs/README.md`](Cloud/Securing%20the%20Database/aws-vpcs/README.md)
+  - Virtual networks overview → [`Cloud/Securing the Database/virtual-networks/README.md`](Cloud/Securing%20the%20Database/virtual-networks/README.md)
+  - App VM as jumpbox (notes) → [`Cloud/Securing the Database/app-vm-as-jumpbox/`](Cloud/Securing%20the%20Database/app-vm-as-jumpbox/)
+  - S3 + boto3 task → [`Cloud/s3/boto3-task.md`](Cloud/s3/boto3-task.md)
+  - Monitoring & alerts task → [`Cloud/monitoring-and-alerts/alerts-task.md`](Cloud/monitoring-and-alerts/alerts-task.md)
+  - Auto Scaling Groups overview → [`Cloud/auto-scaling-groups/README.md`](Cloud/auto-scaling-groups/README.md)
 
-* **EC2** lifecycle, AMIs, key pairs, Security Groups, userdata bootstrapping.
-* **Networking** foundations: subnets, IGW vs NAT, route tables.
-* “Source of truth” mindset: record actual infra states and changes.
+### Infrastructure as Code (Terraform & Ansible)
+From single VM security-group tests to a two-tier app, plus Ansible inventories and playbooks.
+- Folder: [`IaC/`](IaC/)
 
-**Start here:** `cloud-aws/README.md`
+**Terraform**
+- Two-Tier App (app + db + userdata template)  
+  - Guide → [`IaC/2-tier-app/README.md`](IaC/2-tier-app/README.md)  
+  - Root module → [`IaC/2-tier-app/main.tf`](IaC/2-tier-app/main.tf), [`database.tf`](IaC/2-tier-app/database.tf), [`variable.tf`](IaC/2-tier-app/variable.tf)  
+  - Userdata template → [`IaC/2-tier-app/run-app.sh.tftpl`](IaC/2-tier-app/run-app.sh.tftpl)
+- Create-a-test VM + SG (minimal example)  
+  - → [`IaC/create-test-vm-sg/README.md`](IaC/create-test-vm-sg/README.md), [`main.tf`](IaC/create-test-vm-sg/main.tf), [`terraform.tf`](IaC/create-test-vm-sg/terraform.tf), [`variable.tf`](IaC/create-test-vm-sg/variable.tf)
+- Intro & setup notes  
+  - Terraform install & first steps → [`IaC/intro-to-tf/terraform-installation.md`](IaC/intro-to-tf/terraform-installation.md)  
+  - IaC concepts intro → [`IaC/intro-to-tf/intro-to-iac.md`](IaC/intro-to-tf/intro-to-iac.md)  
+  - AWS env vars → [`IaC/intro-to-tf/aws-env-variables.md`](IaC/intro-to-tf/aws-env-variables.md)  
+  - Using `.gitignore` with IaC → [`IaC/intro-to-tf/using-.gitignore.md`](IaC/intro-to-tf/using-.gitignore.md)  
+  - Source of truth / drift notes → [`IaC/configuration-drift-source-of-truth.md`](IaC/configuration-drift-source-of-truth.md)
 
----
+**Ansible**
+- Controller/App/DB structure → [`IaC/terraform/ansible/README.md`](IaC/terraform/ansible/README.md)  
+  - Controller → [`IaC/terraform/ansible/controller/`](IaC/terraform/ansible/controller/)  
+  - App node → [`IaC/terraform/ansible/app-node/`](IaC/terraform/ansible/app-node/)  
+  - DB node → [`IaC/terraform/ansible/db-node/`](IaC/terraform/ansible/db-node/)
+- Learning playbooks (idempotent tasks & verification) → [`IaC/terraform/ansible-learning/playbooks/`](IaC/terraform/ansible-learning/playbooks/)  
+  - App provisioning variants:  
+    - [`prov-app-all.yml`](IaC/terraform/ansible-learning/playbooks/prov-app-all.yml)  
+    - [`prov-app.yml`](IaC/terraform/ansible-learning/playbooks/prov-app.yml)  
+    - [`prov_app_with_pm2.yml`](IaC/terraform/ansible-learning/playbooks/prov_app_with_pm2.yml)  
+    - [`prov_app_with_pm2_copy.yml`](IaC/terraform/ansible-learning/playbooks/prov_app_with_pm2_copy.yml)  
+    - [`prov_app_with_npm_start.yml`](IaC/terraform/ansible-learning/playbooks/prov_app_with_npm_start.yml)
+  - DB provisioning:  
+    - [`install_mongodb.yml`](IaC/terraform/ansible-learning/playbooks/install_mongodb.yml)  
+    - [`prov-db.yml`](IaC/terraform/ansible-learning/playbooks/prov-db.yml)
+  - Nginx:  
+    - [`install_nginx.yml`](IaC/terraform/ansible-learning/playbooks/install_nginx.yml)
+  - Utilities:  
+    - [`master-playbook.yml`](IaC/terraform/ansible-learning/playbooks/master-playbook.yml)  
+    - [`print-facts.yml`](IaC/terraform/ansible-learning/playbooks/print-facts.yml)
 
-### Terraform
+### CI/CD (Jenkins)
+First-time setup notes, plus a visual of how the pipeline stages connect.
+- Folder: [`CICD/`](CICD/)
+- Quick starts:
+  - Pipeline walkthrough → [`CICD/jenkins-first-time.md`](CICD/jenkins-first-time.md)
+  - How our Jenkins CI/CD works (diagram PNG) → [`CICD/images/How Our CICD Pipeline on Jenkins Works.png`](CICD/images/How%20Our%20CICD%20Pipeline%20on%20Jenkins%20Works.png)
+  - Folder overview → [`CICD/README.md`](CICD/README.md)
 
-* From single-VM to **modular** IaC: VPC, public/private subnets, SGs, EC2.
-* Using **variables**, **outputs**, and environment-specific `*.tfvars`.
-* Userdata to bootstrap app instances consistently.
+## End-to-End (Two-Tier App + CI/CD)
 
-**Start here:** `terraform/README.md`
-**Look at:** `terraform/modules/` and `terraform/envs/`
+1. **Code** → Commit to GitHub (`dev`).  
+2. **CI** → Jenkins runs tests on push.  
+3. **Promote** → Merge `dev → main` on green.  
+4. **Infra** → Terraform builds/updates EC2 + security groups.  
+5. **Config** → Ansible provisions **app** and **MongoDB** (idempotent).  
+6. **Deploy** → Jenkins ships artefacts to EC2 (SCP/rsync) and restarts service.  
+7. **Verify** → Front page + `/posts` smoke tests.
 
----
-
-### Ansible
-
-* **Controller + targets** pattern: inventory, groups, SSH connectivity.
-* **Idempotent** roles/playbooks for:
-
-  * App node: Node.js app service (front page), env vars.
-  * DB node: MongoDB 7.x install/config (`bindIp 0.0.0.0`), service enable/restart.
-* Ad-hoc commands for verification (status, config checks).
-
-**Start here:** `ansible/README.md`
-**Playbooks:** `ansible/playbooks/*.yml`
-
----
-
-### CI/CD with Jenkins
-
-* Three-job pipeline used in class and extended for my projects:
-
-  1. **Job 1 (CI/Test):** pull code, install deps, run unit tests.
-  2. **Job 2 (Merge/Promote):** gated merge `dev → main` after passing tests.
-  3. **Job 3 (CD/Deploy):** deliver build to EC2 via **SCP/rsync**, restart service.
-* Credentials hygiene (SSH keys), logs, and post-build actions.
-
-**Start here:** `cicd-jenkins/README.md`
-
----
-
-## End-to-End Pipeline (Two-Tier App)
-
-> The “capstone” flow showing how the pieces fit:
-
-1. **Code** → Commit to GitHub (`dev` branch).
-2. **CI** → Jenkins Job 1 runs tests on push.
-3. **Promote** → Jenkins Job 2 merges `dev → main` on green builds.
-4. **Infra** → Terraform ensures app/db infra exists and is correct.
-5. **Config** → Ansible configures app and database nodes idempotently.
-6. **Deploy** → Jenkins Job 3 syncs the app build to EC2 and restarts the service.
-7. **Verify** → Health checks + basic smoke tests (front page, `/posts` backed by MongoDB).
-
-**Diagrams:** see `diagrams/` for CI/CD and VPC topology.
-
----
+Diagrams & screenshots live under:
+- CI/CD visuals → [`CICD/images/`](CICD/images/)
+- Any VPC/network sketches (if added) → `IaC/` or `Cloud/` subfolders
 
 ## How to Use This Repo
 
-* Each top-level folder has its **own `README.md`** with prerequisites and commands.
-* Most projects are **Linux-first**; use a terminal with Bash/Zsh or WSL.
-* For AWS/Terraform/Ansible sections you’ll need:
-
-  * An AWS account + key pair
-  * `awscli`, `terraform`, `ansible`, and `ssh` installed
-  * Environment variables or profiles configured for AWS auth
-
-> Tip: Follow the order **Terraform → Ansible → Jenkins** if you want to reproduce the full pipeline.
-
----
-
-## Evidence & Screens
-
-* Key screenshots, diagrams, and notes live in:
-
-  * `diagrams/`
-  * `cicd-jenkins/job*/`
-  * `kedb-runbooks/`
-
-You’ll also find links in sub-`README.md` files to demo URLs (when live) and logs/output snippets.
-
----
-
-## Troubleshooting & KEDB
-
-Production thinking from day one. I log:
-
-* **Symptoms** → **Root cause** → **Fix** → **Prevention**
-* Common Jenkins failures (agent labels, credentials, workspace paths)
-* SSH/SCP issues (permissions, known_hosts, file paths)
-* Terraform drift vs source-of-truth notes
-* Ansible idempotency and handler gotchas
-
-See `kedb-runbooks/` for Known Error Database entries and printable runbooks.
-
----
-
-## Roadmap / Next Steps
-
-* Add **CloudWatch** metrics/alarms and basic log shipping.
-* Parameterise Jenkins jobs for **blue/green** or **canary** style demos.
-* Extend Terraform modules for **ALB + Target Groups + ASG**.
-* Convert Ansible tasks into **roles** with Molecule tests.
-* Add GitHub Actions examples alongside Jenkins.
-
----
+- Each folder includes notes/READMEs with prerequisites and commands.  
+- Linux-first (Bash/WSL). For AWS/Terraform/Ansible you’ll need:
+  - AWS account + key pair
+  - `awscli`, `terraform`, `ansible`, `ssh`
+  - AWS credentials via profiles or env vars
 
 ## About Me
 
-I’m **Lauren**, now a **Level 2 Support Engineer** (ex-primary teacher). I love building reliable systems, documenting clearly, and leaving things better than I found them. I’ve been **investing in myself**, and I’m now looking to **add value and use all the skills I’ve learnt to date** in real-world teams.
+I’m **Lauren**, now a **Level 2 Support Engineer** (ex-primary teacher). I’ve been **investing in myself**, and I’m now looking to **add value and use all the skills I’ve learnt to date** in real-world teams.
 
-* **Focus areas:** Supportability, CI/CD, Infra as Code, clear runbooks.
-* **Connect:** *(add your LinkedIn/GitHub profile links here)*
+- Focus areas: supportability, CI/CD, IaC, clear runbooks  
+- Connect: *(add LinkedIn/GitHub links here)*
 
----
-
-### Quick Links (replace with actual paths/URLs)
-
-* Two-tier app overview → `diagrams/`
-* Jenkins pipeline → `cicd-jenkins/README.md`
-* Terraform VPC module → `terraform/modules/vpc/`
-* Ansible DB playbook → `ansible/playbooks/prov-db.yml`
-* KEDB & runbooks → `kedb-runbooks/`
-
----
-
-If you want, I can also tailor this with **direct links to your actual folders/files** (once you confirm your exact paths), or add a small badge section at the top.

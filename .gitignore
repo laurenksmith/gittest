@@ -285,6 +285,9 @@ cython_debug/
 # CMake
 cmake-build-*/
 
+# Jenkins login details
+CICD/jenkins-first-time.md
+
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 
