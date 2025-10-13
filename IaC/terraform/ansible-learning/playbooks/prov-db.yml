@@ -1,5 +1,6 @@
 ---
 
+# PLAY 1: DB
 - name: install db dependencies and run db
   hosts: db
   gather_facts: true

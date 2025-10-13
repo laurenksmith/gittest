@@ -2,14 +2,14 @@
 # yml very sensitive to indentation - be careful and double check
 ---
 
-# name the play
+# PLAY 2: APP 
 - name: install app dependencies and run app
   hosts: web
   gather_facts: true
   become: true
 
   vars:
-    db_host: "mongodb://172.31.33.111/posts"
+    db_host: "mongodb://{{ hostvars[groups['db'][0]].ansible_host | default(groups['db'][0]) }}/posts"
 
   tasks:
     - name: update apt cache
@@ -29,6 +29,13 @@
         dest: /tmp/nodesource_setup.sh
         mode: '0755'
 
+    - name: Run NodeSource setup script (adds repo + key)
+      ansible.builtin.command: bash /tmp/nodesource_setup.sh
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
     - name: Install Node.js
       ansible.builtin.apt:
         name: nodejs
@@ -47,7 +54,7 @@
       args:
         chdir: ~/tech-511-lauren-first-app/app
       environment:
-        DB_HOST: "mongodb://172.31.33.111/posts"
+        DB_HOST: "{{ db_host }}"
       become: false
 
     - name: Install PM2 globally
@@ -67,7 +74,7 @@
       args:
         chdir: ~/tech-511-lauren-first-app/app
       environment:
-        DB_HOST: "mongodb://172.31.33.111/posts"
+        DB_HOST: "{{ db_host }}"
       become: false
 
     - name: Save PM2 process list

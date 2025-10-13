@@ -1,0 +1,7 @@
+---
+
+- name: Run database provisioning
+  import_playbook: prov-db.yml
+
+- name: Run app provisioning
+  import_playbook: prov_app_with_pm2_copy.yml
