@@ -20,11 +20,10 @@ spartaprojects/
 └─ README.md                   # ← you are here
 
 
-## Top 5 entry points
+## Top 4 entry points
 
 - **Two-Tier App (Terraform)** →   [README.md](IaC/2-tier-app/README.md)
-- **Ansible Playbooks (app + db)** → [Playbooks](IaC/terraform/ansible-learning/playbooks/)  
-- **Jenkins: how our pipeline works** → [`CICD/jenkins-first-time.md`](CICD/jenkins-first-time.md)  
+- **Ansible Playbooks (app + db)** → [Playbooks](IaC/terraform/ansible-learning/playbooks/)   
 - **AWS VPCs (networking notes)** → [`Cloud/Securing the Database/aws-vpcs/README.md`](Cloud/Securing%20the%20Database/aws-vpcs/README.md)  
 - **Python tasks & mini-projects** → [`python/`](python/)
 
@@ -95,7 +94,6 @@ From single VM security-group tests to a two-tier app, plus Ansible inventories 
 First-time setup notes, plus a visual of how the pipeline stages connect.
 - Folder: [`CICD/`](CICD/)
 - Quick starts:
-  - Pipeline walkthrough → [`CICD/jenkins-first-time.md`](CICD/jenkins-first-time.md)
   - How our Jenkins CI/CD works (diagram PNG) → [`CICD/images/How Our CICD Pipeline on Jenkins Works.png`](CICD/images/How%20Our%20CICD%20Pipeline%20on%20Jenkins%20Works.png)
   - Folder overview → [`CICD/README.md`](CICD/README.md)
 
